@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="/stylesheets/landing.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <%- include("../../partials/header"); -%>
+  <link rel="stylesheet" href="/stylesheets/dashboard.css" />
+  <script src="https://cdn2.hubspot.net/hubfs/476360/utils.js"></script>
+
+  <body id="body-pd">
+    <%-include("../../partials/altNavbar");-%>
+    <%-include("../../partials/altSidebar");-%>
+    <main>
+      <div class="div1 card">
+        <div class="clearfix">
+          <div class="card-icon shadow-primary bg-blue">
+            <i class="material-icons align-middle">local_activity</i>
+          </div>
+          <div class="card-right">
+            <div>
+              <h5 class="pull-right">Expenditure</h5>
+            </div>
+            <div class="m-r-10 m-l-10">
+              <h3 class="font-weight-bold pull-right mb-0">
+                Rs <%=patientStats.expenditure%>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-chart">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand"></div>
+            <div class="chartjs-size-monitor-shrink"></div>
+          </div>
+          <canvas
+            id="div1"
+            basechart=""
+            class="chartjs-render-monitor"
+            width="432"
+            height="216"
+            style="display: block; width: 432px; height: 216px"
+          ></canvas>
+        </div>
+      </div>
+      <div class="div2 card">
+        <div class="clearfix">
+          <div
+            class="card-icon shadow-primary bg-green"
+            style="background: #228b22ba"
+          >
+            <i class="material-icons align-middle">person_add</i>
+          </div>
+          <div class="card-right">
+            <div>
+              <h5 class="pull-right">Active Doctors</h5>
+            </div>
+            <div class="m-r-10 m-l-10">
+              <h3 class="font-weight-bold pull-right mb-0">
+                <%=currentUser.currentDoctors.length - 1%>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-chart">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand"></div>
+            <div class="chartjs-size-monitor-shrink"></div>
+          </div>
+          <canvas
+            id="div2"
+            basechart=""
+            class="chartjs-render-monitor"
+            width="432"
+            height="216"
+            style="display: block; width: 432px; height: 216px"
+          ></canvas>
+        </div>
+      </div>
+      <div class="div3 card">
+        <div class="clearfix">
+          <div
+            class="card-icon shadow-primary bg-orange"
+            style="background: orange"
+          >
+            <i class="material-icons align-middle">content_cut</i>
+          </div>
+          <div class="card-right">
+            <div>
+              <h5 class="pull-right">Total Doctors</h5>
+            </div>
+            <div class="m-r-10 m-l-10">
+              <h3 class="font-weight-bold pull-right mb-0">
+                <%=currentUser.appointedDoctors.length - 1%>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-chart">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand"></div>
+            <div class="chartjs-size-monitor-shrink"></div>
+          </div>
+          <canvas
+            id="div3"
+            basechart=""
+            class="chartjs-render-monitor"
+            width="432"
+            height="216"
+            style="display: block; width: 432px; height: 216px"
+          ></canvas>
+        </div>
+      </div>
+      <div class="div4 card">
+        <div class="clearfix">
+          <div
+            class="card-icon shadow-primary bg-purple"
+            style="background: #8309d0b8"
+          >
+            <i class="material-icons align-middle">face</i>
+          </div>
+          <div class="card-right">
+            <div>
+              <h5 class="pull-right">Appointments</h5>
+            </div>
+            <div class="m-r-10 m-l-10">
+              <h3 class="font-weight-bold pull-right mb-0">
+                <%=patientStats.appointment%>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-chart">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand"></div>
+            <div class="chartjs-size-monitor-shrink"></div>
+          </div>
+          <canvas
+            id="div4"
+            basechart=""
+            class="chartjs-render-monitor"
+            width="432"
+            height="216"
+            style="display: block; width: 432px; height: 216px"
+          ></canvas>
+        </div>
+      </div>
+    </main>
+    <%-include("../../partials/footer");-%>
+    <script src="/jsFiles/chartJs/div1.js"></script>
+    <script src="/jsFiles/chartJs/div2.js"></script>
+    <script src="/jsFiles/chartJs/div3.js"></script>
+    <script src="/jsFiles/chartJs/div4.js"></script>
+  </body>
+</html>

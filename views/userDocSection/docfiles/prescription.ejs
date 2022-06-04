@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/stylesheets/userDocSection/docfiles/prescriptionGenerator.css" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<html>
+  <%- include("../../partials/header"); -%>
+  
+
+  <body id="body-pd">
+    <%-include("../../partials/altNavbar"); -%>
+    <%-include("../../partials/altSidebar");-%>
+      <div class="content-block">
+        <div class="non-preview-area ">
+          <div class="patInfo-non-preview card">
+            <p>
+              <span>
+               <strong> Mr./Ms./Mrs </strong>.: <%= foundPatient.firstName + " " + foundPatient.lastName %> 
+                <a>  </a>  <!--<%= //rows.name %>-->
+              </span>
+            </p>
+            <p>
+              <span>
+              <strong> Age </strong>: <%= age[0].age %>
+                <a>  </a>  <!--<%= //rows.age %>-->
+              </span>
+            </p>
+            <p>
+              <span>
+              <strong>Address </strong>  : <%= foundPatient.address.street + " " + foundPatient.address.city + " " +foundPatient.address.state %>
+                <a>  </a>  <!--<%= //rows.address %>-->
+              </span>
+            </p>
+            <p>
+              <span>
+              <strong> Gender </strong>:  <%= foundPatient.gender %>
+                <a> </a>  <!--<%= //rows.contact %>-->
+              </span>
+            </p>
+            <p>
+              <span>
+              <strong> Contact </strong>:  <%= foundPatient.phone %>
+                <a> </a>  <!--<%= //rows.contact %>-->
+              </span>
+            </p>
+           
+            <p>
+              <span>
+              <strong> Email </strong>: <span id="email"><%= foundPatient.email %></span>
+                
+              </span>
+            </p>
+          </div>
+          <form id="prescriptionForm" action="/generatePresc/addMedicine/<%=foundPatient._id%>" method="POST">
+          <div class="card">
+          <div id= "form1" >
+            <!-- <form action="/generatePresc/addMedicine/<%=foundPatient._id%>" method="POST"> -->
+              <div class="form-row">
+                <div class="form-group col-md-5">
+                  <label for="medicine">Medicine:</label>
+
+                  <select name="medicine[]" id="medicine" class="form-control">
+                    <option value="Norflox">Norflox</option>
+                    <option value="Paracetamol">Paracetamol</option>
+                    <option value="Crocin">Crocin</option>
+                    <option value="Cough Syrup">Cough Syrup</option>
+                  </select>
+                  <input type="hidden" name="hiddenMedicineName" id="hiddenMedicineName">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="dosage">Dosage</label>
+
+                  <select
+                    name="dosage"
+                    id="dosage"
+                    class="form-control"
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                  </select>
+
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="frequency">Frequency</label>
+
+                  <select
+                    name="frequency"
+                    id="frequency"
+                    class="form-control"
+                  >
+                    <option value="day">day</option>
+                    <option value="week">week</option>
+                    <option value="month">month</option>
+                  </select>
+                </div>
+               
+               
+                <div class="form-group col-md-2" id="btn1">
+                  <button type="button" class="btn btn-success" onclick="updateMedicines()">Add</button>
+                </div>
+              </div>
+            <!-- </form> -->
+          </div>
+          <div id="form2">
+            <!-- <form action=""> -->
+              <div class="form-row">
+                <div class="form-group col-md-10">
+                  <label for="test">Choose a Test:</label>
+
+                  <select name="Test" id="test" class="form-control">
+                    <option value="Blood-Test">Blood-Test</option>
+                    <option value="X-Ray">X-Ray</option>
+                    <option value="MRI">MRI</option>
+                    <option value="CT-Scan">CT-Scan</option>
+                  </select>
+                  <input type="hidden" name="hiddenTest" id="hiddenTest">
+
+                </div>
+
+                <div class="form-group col-md-2" id="btn2">
+                  <button type="button" class="btn btn-success" onclick="updateTests()">Add</button>
+                </div>
+              </div>
+            <!-- </form> -->
+          </div>
+        </div>
+        <div class="card" id="code-area">
+          <div>
+            <label for="disease">Disease</label>
+            <input type="text" class="form-control" placeholder="Please Enter The Disease" name="disease" id="disease">
+          </div>
+          <div class="code-area">
+            <textarea
+            name="comment"
+              id="comment"
+              placeholder="Input Comment"
+              oninput="showPreview()"
+            ></textarea>
+          </div>
+        </div>
+        </form>
+        <div id="btnDiv">
+
+      <button id="btn4" style=" margin-top: 1rem; margin-bottom: 2rem;" class="btn btn-success" onclick="sendEncodedPdf('<%=foundPatient._id%>')">Submit</button>
+
+       </div>
+        
+
+      </div>
+        <div class="preview-area" id="print">
+          <div class="card-outer">
+            <br />
+            <br />
+            <br />
+            <div class="headerPrescription">
+              <div class="text">
+                <h1>MedBuddy</h1>
+              </div>
+              <div id="icon">
+                <i class="fa fa-heartbeat" aria-hidden="true"></i>
+              </div>
+            </div>
+            <br />
+            <br />
+
+            <hr />
+
+            <i
+              id="dropdown"
+              class="fa fa-sort-desc"
+              aria-hidden="true"
+              data-toggle="collapse"
+              href="#docInfo"
+              role="button"
+              aria-expanded="false"
+              aria-controls="docInfo"
+            ></i>
+            <div class="docInfo collapse" id="docInfo">
+              <p class="p1">
+                <span id="docName">
+                  Doctor: <%= doctorDetails[0].firstName + " " + doctorDetails[0].lastName %>
+                  </span>
+                
+              </p>
+              <p><span>
+                Prescription No: <span id="prescriptionNo"><%=prescriptionNo%></span>
+              </span></p>
+              <p class="p2">
+                <span>
+                  Qualification: <%= doctorProfessionalDetails[0].qual%>
+                </span>
+                
+              </p>
+              <p><span>
+                Date: <%= date%>
+              </span></p>
+              <p class="p3">
+                <span>
+                  Email: <%= doctorDetails[0].email%>
+                </span>
+              </p>
+            </div>
+            <hr />
+            <br />
+            <br />
+
+            <div class="flipcard">
+              <div class="flipcardinner">
+                <div class="flipcardfront">
+                  <table id="medicineTable"> 
+                    <thead>
+                      <tr class="table100-head">
+                        <th class="column2" style="text-align: center;">Medicine</th>
+                        <th class="column2" style="text-align: center;">Dosage</th>
+                        <th class="column2" style="text-align: center;">Frequency</th>
+                      </tr>
+                    </thead>
+                    <tbody id="front">
+                      
+                    </tbody>
+                  </table>
+                </div>
+                <div class="flipcardback">
+                  <table id="testTable">
+                    <thead>
+                      <tr class="table100-head">
+                        <th class="column1">Recommended Test</th>
+                      </tr>
+                    </thead>
+                    <tbody id="back">
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br /><br />
+            <br />
+
+
+<!-- <iframe id="preview-window"> </iframe>           -->
+
+            <div class="patInfo">
+              
+              <p>
+                <span>
+                 <strong> Mr./Ms./Mrs.:</strong>  <%= foundPatient.firstName + " " + foundPatient.lastName %> 
+                </span>
+              </p>
+              <p ><span><strong>Comment:</strong><span id="commentPreview"></span></span></p>
+              <p>
+                <span>
+                  <strong>Address:</strong> <%= foundPatient.address.street + " " + foundPatient.address.city + " " +foundPatient.address.city %>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <strong>Contact:</strong> <%= foundPatient.phone %>
+                </span>
+              </p>
+            </div>
+
+            <div id="footer">
+              <div id="footerIcon1">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+              </div>
+              <div id="footerIcon2">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+              </div>
+            </div>
+            <br />
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="print-btn"></div>
+
+
+    <%-include("../../partials/footer"); -%>
+    <script>
+      
+      function showPreview() {
+        var comment = document.getElementById("comment").value;
+        var frame = document.getElementById("preview-window").contentWindow
+          .document;
+        frame.open();
+        frame.write(comment);
+        frame.close();
+      }
+    </script>
+<script> 
+  var medicine = [];
+  var test = [];
+  var comment;
+
+  function updateMedicines(){  
+    var medicineData = {
+    medicineName:document.getElementById("medicine").value,
+    dosage:document.getElementById("dosage").value,
+    frequency:document.getElementById("frequency").value
+  }
+    medicine.push(medicineData)
+    var table = document.getElementById("front")
+    var row= table.insertRow(-1)
+    var cell1 = row.insertCell(0)
+    cell1.className = "column2"
+    var cell2 = row.insertCell(1)
+    cell2.className = "column2"
+
+    var cell3 = row.insertCell(2)
+    cell3.className = "column2"
+
+    cell1.innerHTML = document.getElementById("medicine").value
+    cell2.innerHTML = document.getElementById("dosage").value
+    cell3.innerHTML = document.getElementById("frequency").value
+
+    document.getElementById("hiddenMedicineName").value = JSON.stringify(medicine)
+  }
+  function updateTests(){
+    var testData = {
+      testName:document.getElementById("test").value
+    }
+    test.push(testData)
+    var table = document.getElementById("back")
+    var row= table.insertRow(-1)
+    var cell1 = row.insertCell(0)
+    cell1.className = "column1"
+    cell1.innerHTML = document.getElementById("test").value
+    document.getElementById("hiddenTest").value = JSON.stringify(test)
+  }
+  function updateComment(){
+    comment = document.getElementById("comment").value
+    console.log(comment)
+  }
+
+  function mySubmit(){
+    document.getElementById
+  }
+</script>
+    <script>
+      $(".flipcard .flipcardinner").click(function () {
+        $(this).closest(".flipcard").toggleClass("click");
+        $(this).css("transform, rotateY(180deg)");
+      });
+    </script>
+      <script src="/jsFiles/navbar.js"></script>
+      
+     
+      <script>
+      var specialElementHandlers = {
+          '#print-btn': function (element, renderer) {
+              return true;
+          }
+      };
+      
+      function sendEncodedPdf(id) {
+        var doc = new jsPDF();
+        var email = document.getElementById("email").innerHTML
+        var filename = document.getElementById("prescriptionNo").innerHTML + ".pdf"
+        var comment = document.getElementById("comment").value;
+      document.getElementById("commentPreview").innerHTML=comment
+          doc.fromHTML($('#print').html(), 15, 15, {
+              'width': 170,
+                  'elementHandlers': specialElementHandlers
+          });
+          // doc.save(filename);
+          var pdf = btoa(doc.output()); 
+    $.ajax({
+      method: "POST",
+      url: `/userDocSection/emailPrescription/${id}`,
+      data: {data: pdf,email:email,filename:filename},
+    }).done(function(data){
+      document.getElementById("prescriptionForm").submit()
+    });
+          
+      };
+      </script> 
+  </body>
+</html>

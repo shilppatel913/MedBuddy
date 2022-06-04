@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <%- include("../../partials/header"); -%>
+
+    <title>Page Title</title>
+    <link rel="stylesheet" href="/stylesheets/userDocSection/docfiles/patientList.css">  </head>
+ <style>
+   .modal-backdrop.fade.show{
+     width: 100% !important
+   }
+ </style>
+  <body id="body-pd">
+    <%-include("../../partials/altNavbar"); -%>
+    <%-include("../../partials/altSidebar");-%>
+    <% if(foundAppointments.length > 0){ %>
+    <div class="content-block">
+      <div  style="margin: auto;">
+        <div style="display: inline;"><a href="/userDocSection/patientDashboard" class="btn btn-xs btn-secondary" >Go Back!</a>
+        </div>
+        
+      </div>
+      <div class="card" style="width: 80%; margin: auto;height: 100%;">
+        <div style="display: inline-flex;">
+          <h4 style="text-align: center; margin: 1rem auto 2rem"><strong>Appointment's list</strong></h4>
+          <div style="float: right;">
+            <label for="filter">Filter</label>
+            <select name="filter" id="filter" style="border: 2px solid black;" class="form-control">
+              <option value="all">All</option>
+              <option value="true">Active</option>
+              <option value="false">Canceled or Completed</option>
+            </select>
+          </div>
+        </div>
+        
+        <div id="patientList" style="width: 100%;"> 
+          <table id="table" class="table table-striped" style="height: 100%;">
+              <thead style="color: white;">
+                <tr>
+                  <th scope="col">S.N</th>
+                  <th scope="col">Doctor's Name</th>
+                  <th scope="col">For Disease</th>
+                  <th scope="col">Created On</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <% for(let i=foundAppointments.length -1 ;i>=0;i--) { %>
+                      <tr style="text-align: center;" class="<%=foundAppointments[i].activityStatus%>">
+                          <td id="cou"><%=foundAppointments.length - i %></td>
+                          <td ><%= foundAppointments[i].docId.handler_id.firstName + " " + foundAppointments[i].docId.handler_id.lastName %> </td>
+                          <td><%= foundAppointments[i].disease%></td>
+                          <td><%= moment(foundAppointments[i].createdAt).format('ll')%></td>
+                          <td>
+                            <% if(foundAppointments[i].activityStatus){ %>
+                              <% if(foundAppointments[i].roomId != ""){%>
+                                <a class="btn btn-sm btn-info" style="margin-right:5px;margin-bottom: 2px; width: 90%;justify-content: center; display: inline-flex;" href="/start_call<%=foundAppointments[i].roomId%>">Join Room</a>
+                                <%}else{%>
+                            <button type="button" style="display: inline-flex;width: 90%; justify-content: center;" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">
+                              Cancel Appointment
+                            </button>
+                            <div class="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true" style="width: 100%; z-index: 9999;">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel" style="text-align: center;">Cancel Appointment</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Do you want to cancel this Appointment?
+                                  </div>
+                                  <form action="/userDocSection/cancelAppointment/<%=foundAppointments[i]._id%>" method="POST">
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-danger">Yes</a>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <%}%>
+                          <% } else if(!foundAppointments[i].activityStatus && foundAppointments[i].isCompleted){ %> 
+                            <p style="color: lightgreen;"><strong>Appointment Compeleted!</strong></p>
+                          <% } else { %>
+                            <p style="color: red;"><strong>Appointment Canceled!</strong></p>
+                          <% } %>
+                      </tr>
+                  <% }%>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+    <% } else { %>
+      <h4 style="text-align: center;">No Appointments found!!</h4>
+    <% } %>
+    <%-include("../../partials/footer"); -%>
+  </body>
+  <script>
+    $('#filter').on('change', function () {
+      if ($(this).val() == "true") {
+        var rowCount = $('#table .true').length;
+        var table = document.getElementsByClassName("true");
+        let j=1;
+        for (let i = 0; i<rowCount; i++) {
+          table[i].cells[0].innerHTML = j
+          j+=1
+        }
+        $(".true").show()
+        $(".false").hide()
+      }
+      else if ($(this).val() == "false") {
+        var rowCount = $('#table .false').length;
+        var table = document.getElementsByClassName("false");
+        let k=1;
+        for (let i = 0; i<rowCount; i++) {
+          table[i].cells[0].innerHTML = k
+          k+=1
+        }
+        $(".false").show()
+        $(".true").hide()
+      }
+      else {
+        var table = document.getElementById("table");
+        let l=1;
+        for (let i = 1; i<table.rows.length; i++) {
+          table.rows[i].cells[0].innerHTML = l
+          l+=1
+        }
+        $(".true").show()
+        $(".false").show()
+      }
+    });
+    
+  </script>
+  
+</html>
+

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="/stylesheets/landing.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <%- include("../../partials/header"); -%>
+  <!-- <link rel="stylesheet" href="/stylesheets/partials/navbar.css" /> -->
+  <link rel="stylesheet" href="/stylesheets/dashboard.css" />
+  <script src="https://cdn2.hubspot.net/hubfs/476360/utils.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
+    
+    #username{
+        margin-top: 5px;
+        font-weight: 300;
+    }
+
+    #name{
+        margin: 0.8rem 0 0.5rem;
+        font-family: 'Oxygen', sans-serif;
+        font-weight: 700;
+        color: rgb(2, 24, 10) ;
+        display: block;
+    }
+
+    #createProfile{
+        margin: 3rem 0 0.5rem;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 700;
+        text-decoration: none;
+        color: rgb(10, 139, 60) ;
+        display: block;
+    }
+    #updateProfile{
+        margin: 1rem 0 0.8rem;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 700;
+        text-decoration: none;
+        color: rgb(23, 124, 131) ;
+        display: block;
+    }
+    #mainPageRedirect{
+        margin: 1rem 0;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 700;
+        text-decoration: none;
+        color: rgb(179, 7, 7) ;
+        display: block;
+    }
+
+    .underline-from-center {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -moz-osx-font-smoothing: grayscale;
+        position: relative;
+        overflow: hidden;
+    }
+    #mainPageRedirect.underline-from-center:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 50%;
+        right: 50%;
+        bottom: 0;
+        background: rgb(179, 7, 7) ;
+        height: 2px;
+        -webkit-transition-property: left right;
+        transition-property: left right;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+    }
+
+    #updateProfile.underline-from-center:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 50%;
+        right: 50%;
+        bottom: 0;
+        background: rgb(23, 124, 131) ;
+        height: 2px;
+        -webkit-transition-property: left right;
+        transition-property: left right;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+    }
+    #createProfile.underline-from-center:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 50%;
+        right: 50%;
+        bottom: 0;
+        background: rgb(10, 139, 60) ;
+        height: 2px;
+        -webkit-transition-property: left right;
+        transition-property: left right;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-timing-function: ease-out;
+        transition-timing-function: ease-out;
+    }
+
+    #mainPageRedirect.underline-from-center:hover:before {
+        left: 1rem;
+        right: 1rem;
+    }
+    #updateProfile.underline-from-center:hover:before {
+        left: 20px;
+        right: 20px;
+    }
+    #createProfile.underline-from-center:hover:before {
+        left: 0;
+        right: 0;
+    }
+</style>
+
+  <body id="body-pd">
+    <%-include("../../partials/altNavbar");-%>
+    <%-include("../../partials/altAdminSideNavbar");-%>
+        </nav>
+      </div>      
+
+    <div class="row" style="margin: 8rem 4rem;">
+        <div class="col-md-10">
+            <% if(foundHosp.length > 0){ %>
+                <h5><u><b>About your institutions</b></u></h5>
+                <div style="line-height: 1.9rem;">
+                    <p><strong>Hospital Name:</strong> <%=foundHosp[0].name%> </p>
+                    <p><strong>Hospital Address:</strong> <%= foundHosp[0].address.street + ", " + foundHosp[0].address.city + ", " + foundHosp[0].address.state + ", " + foundHosp[0].address.zip %> </p>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p><strong>Email: </strong><%=foundHosp[0].contact.email%></p>
+                        </div>
+                        <div class="col-md-5">
+                            <p><strong>Phone Number: </strong><%=foundHosp[0].contact.phone%></p>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <p><strong>No Hospital Registered to Current user! <br> Kindly Create Database from Sidebar</strong></p>
+            <% } %>
+
+            <% if(foundAdmin.length > 0){ %>
+            <h5 style="margin-top: 1rem"><u><strong>Administrator Information: </strong></u></h5>
+            <div style="line-height: 1.9;">
+                <p><strong>Admninstrator Name: </strong> <%= currentUser.firstName + " " + currentUser.lastName%></p>
+                <div class="row">
+                    <div class="col-md-5">
+                        <p><strong>Administrator Email: </strong> <%= foundAdmin[0].adminContact.phone%></p>
+                    </div>
+                    <div class="col-md-5">
+                        <p><strong>Administrator Contact No.: </strong> <%= foundAdmin[0].adminContact.phone%></p>
+                    </div>
+                </div>
+            </div>  
+            <% } else { %>
+                <p><strong>No Admin is Registered   !</strong></p>
+            <% } %>
+            <h5 style="margin-top: 1rem"><u><Strong>Other Details: </Strong></u></h5>
+            <% if(foundHosp.length > 0){ %>
+            <p><strong>Hospital Token No: </strong><%= foundHosp[0]._id%></p>
+            <% } %>
+        </div>
+        <div class="col-md-2"  data-aos="fade-left" style="border-radius: 25px;text-align: center;justify-content:center;box-shadow: 0 0 20px 0px rgb(0 0 0 / 20%);">
+            <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/avatar-182-132174.png" class="img-fluid rounded-circle border" alt="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg" style="margin-top: 2rem; width:60%; box-shadow: 6px 5px 18px 0px rgba(0,0,0,0.33);" >
+            <h5 id="username"><%=currentUser.username%></h5>
+            <h5 id="name"><%= currentUser.firstName + " " + currentUser.lastName%></h5>
+            <span><em>Joined <%= moment(currentUser.joinedAt).fromNow()%></em></span>
+        </div>
+    </div>
+    <%-include("../../partials/footer");-%>
+    <script>
+      AOS.init({
+        duration: 1200,
+      });
+    </script>
+
+  </body>
+</html>

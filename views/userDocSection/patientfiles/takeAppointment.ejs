@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <%- include("../../partials/header"); -%>
+
+    <title>Page Title</title>
+    </head>
+    <body id="body-pd" >
+    <%-include("../../partials/altNavbar"); -%>
+    <%-include("../../partials/altSidebar");-%>
+    <div class="row" style="display: flex;margin: 8rem 4rem;">
+        <div class="col-md-10">
+            <h3><%= doctors.handler_id.firstName + " " + doctors.handler_id.lastName %>'s Information: </h3>
+            <ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <li><h5><strong>Works At: </strong><%= doctors.workAtHosp%> </h5></li>
+                    </div>
+                    <div class="col-md-6">
+                        <li><h5><strong>Speciality:</strong> <%=doctors.speciality%></h5></li>
+                    </div>
+                    <div class="col-md-6">
+                        <li><h5><strong>Morning Timings: </strong><%= moment(doctors.timing.morning.timingFrom, 'HH:mm').format('LT')%> to <%= moment(doctors.timing.morning.timingTo, 'HH:mm').format('LT')%></h5></li>
+                    </div>
+                    <div class="col-md-6">
+                        <li><h5><strong>Evening Timings: </strong><%= moment(doctors.timing.evening.timingFrom, 'HH:mm').format('LT')%> to <%= moment(doctors.timing.evening.timingTo, 'HH:mm').format('LT')%></h5></li>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <li><h5><strong>Experience:</strong> <%= doctors.experience%> years</h5></li>
+                    </div>
+                    <div class="col-md-6">
+                        <li><h5><strong>Fees:</strong> Rs. <%= doctors.fees%></h5></li>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="col-md-2" style="border-radius: 25px;text-align: center;justify-content:center;box-shadow: 0 0 20px 0px rgb(0 0 0 / 20%);">
+            <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/avatar-182-132174.png" class="img-fluid rounded-circle border" alt="https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-avatar-icon-png-image_695765.jpg" style="margin-top: 2rem; width:60%; box-shadow: 6px 5px 18px 0px rgba(0,0,0,0.33);" >
+            <h5 id="username"><%=doctors.handler_id.username%></h5>
+            <h5 id="name"><%= doctors.handler_id.firstName + " " + doctors.handler_id.lastName%></h5>
+            <span><em>Joined <%= moment(doctors.handler_id.joinedAt).fromNow()%></em></span>
+        </div>
+    </div>
+    <div>
+        <a href="#" class="btn btn-success toggleAppointmentForm" style="border-radius: 25px; margin-left: 4rem; text-align: center;" onclick="slotChecker()">Take Appointment</a>
+        <form class="container takeAppointment" action="/userDocSection/createAppointment/<%= doctors._id%>" method="POST" style="margin: 2rem 0 4rem 0; display: none;">
+            <div class="form-row">
+                <div class="form-group col-md-12"  style="display: inline-flex;">
+                    <div class="form-group col-md-6">
+                        <label for="InputNumber">Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" id="InputNumber" pattern="[0-9]{10}" maxlength="10" min=0 aria-describedby="numberHelp" required>
+                        <small id="numberHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>    
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="age">Age(in years):</label>
+                        <input type="number" name="age" class="form-control" min="1" id="age">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="InputSlot">Preferred Slot</label><br>
+                    <div class="col-md-12">
+                        <label for="slotA" id="labelForSlotA.a">Morning Slot: <strong>Available Seats: </strong> </label>
+                        <div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Aa"><%=doctors.timing.morning.timingFrom%> to <%=slotTime.slotAa%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotA.a" id="slotA.a" required></input>
+                                    <span id="slotAa"><%=doctors.availableSlots.slotA.a%></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Ab"><%=slotTime.slotAa%> to <%=slotTime.slotAb%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotA.b" id="slotA.b" required></input>
+                                    <span id="slotAb"><%=doctors.availableSlots.slotA.b%></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Ac"><%=slotTime.slotAb%> to <%=slotTime.slotAc%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotA.c" id="slotA.c" required></input>
+                                    <span id="slotAc"><%=doctors.availableSlots.slotA.c%></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Ad"><%=slotTime.slotAc%> to <%=doctors.timing.morning.timingTo%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotA.d" id="slotA.d" required></input>
+                                    <span id="slotAd"><%=doctors.availableSlots.slotA.d%></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="slotB" id="labelForSlotB">Evening Slot: <strong>Available Seats: </strong> </label>
+                        <div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Ba"><%=doctors.timing.evening.timingFrom%> to <%=slotTime.slotBa%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotB.a" id="slotB.a" required></input>
+                                    <span id="slotBa"><%=doctors.availableSlots.slotB.a%></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Bb"><%=slotTime.slotBa%> to <%=slotTime.slotBb%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotB.b" id="slotB.b" required></input>
+                                    <span id="slotBb"><%=doctors.availableSlots.slotB.b%></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                <div>
+                                    <strong id="Bc"><%=slotTime.slotBb%> to <%=slotTime.slotBc%></strong>
+                                    <input type="radio" name="selectedSlot" value="slotB.c" id="slotB.c" required></input>
+                                    <span id="slotBc"><%=doctors.availableSlots.slotB.c%></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5" style="display: inline-block;">
+                                
+                        <div>
+                            <strong id="Bd"><%=slotTime.slotBc%> to <%=doctors.timing.evening.timingTo%></strong>
+                            <input type="radio" name="selectedSlot" value="slotB.d" id="slotB.d" required></input>
+                            <span id="slotBd"><%=doctors.availableSlots.slotB.d%></span>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="InputSlotDate">Prefered Time of Slot</label>
+                      <input class="form-control" name="preferSlot" type="time" id="timeField" required>
+                      <small class="form-text text-muted">Elgible Slot Time: <br> Morning: <%= moment(doctors.timing.morning.timingFrom, 'HH:mm').format('LT')%> to <%= moment(doctors.timing.morning.timingTo, 'HH:mm').format('LT')%>. <br> Evening: <%= moment(doctors.timing.evening.timingFrom, 'HH:mm').format('LT')%> to <%= moment(doctors.timing.evening.timingTo, 'HH:mm').format('LT')%>. <br> Slot Time may change</small>
+                  </div>
+                  <div class="form-group col-md-12">
+                      <label for="InputDisease">Disease Description</label>
+                      <textarea class="form-control" name="disease" id="InputDisease" cols="10" rows="4" maxlength="200" required></textarea>
+                      <small class="form-text text-muted">Maximum character limit is 200.</small>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="emergency">Is it an Emergency?</label>
+                    <input name="emergency" type="checkbox" id="emergency">
+                    <small class="form-text text-muted">Please use this option responsibly!. Incurs extra charges</small>
+                </div>
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+                </div>
+            </div>
+          </form>
+    </div>
+    <%-include("../../partials/footer"); -%>
+    </body>
+    <script>
+        $(".toggleAppointmentForm").click(function(){
+            $(".takeAppointment").toggle();
+        })
+     
+        function slotChecker(){
+             if(parseInt(document.getElementById("slotAa").innerHTML)==0){
+                document.getElementById("slotA.a").disabled = true
+            }
+            if(parseInt(document.getElementById("slotAb").innerHTML)==0){
+                document.getElementById("slotA.b").disabled = true
+            }
+            if(parseInt(document.getElementById("slotAc").innerHTML)==0){
+                document.getElementById("slotA.c").disabled = true
+            }
+            if(parseInt(document.getElementById("slotAd").innerHTML)==0){
+                document.getElementById("slotA.d").disabled = true
+            }
+            if(parseInt(document.getElementById("slotBa").innerHTML)==0){
+                document.getElementById("slotB.a").disabled = true
+            }
+            if(parseInt(document.getElementById("slotBb").innerHTML)==0){
+                document.getElementById("slotB.b").disabled = true
+            }
+            if(parseInt(document.getElementById("slotBc").innerHTML)==0){
+                document.getElementById("slotB.c").disabled = true
+            }
+            if(parseInt(document.getElementById("slotBd").innerHTML)==0){
+                document.getElementById("slotB.d").disabled = true
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+    $('input[type=radio][name="selectedSlot"]').change(function() {
+        var id = $(this).val().slice(4,5) + $(this).val().slice(6)
+        var min = document.getElementById(id).innerHTML.slice(0,5)
+        var max = document.getElementById(id).innerHTML.slice(9)
+        document.getElementById("timeField").min = min
+        document.getElementById("timeField").max = max
+    });
+});
+    </script>
+</html>

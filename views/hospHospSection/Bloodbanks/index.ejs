@@ -1,0 +1,74 @@
+<%-include("../../partials/header");-%>
+<style type="text/css">
+	.container{
+            margin-top: 8rem;
+        }
+      table {
+      text-align: center;
+    }
+    .table thead th {
+      vertical-align: middle;
+    }
+</style>
+<%- include("../../partials/altNavbar"); -%>
+<%- include("../../partials/altAdminSideNavbar"); -%>
+
+<div class="container">
+	<h2>Bloodbank</h2>
+  <% if(bloodbanks.length > 0){ %> 
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th rowspan="2">#</th>
+                  <th rowspan="2">Hospital</th>
+                  <th colspan="8">Current Capacity</th>
+                  <th rowspan="2">Price(Rs.)</th>
+                  <th rowspan="2">Contact</th>
+                  <th rowspan="2">Action</th>
+                </tr>
+                <tr>
+                  <th >O+</th>
+                  <th >O-</th>
+                  <th >A+</th>
+                  <th >A-</th>
+                  <th >B+</th>
+                  <th >B-</th>
+                  <th >AB+</th>
+                  <th >AB-</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(var i = 0; i < bloodbanks.length; i++){ %>
+                    <tr>
+                      <td><%= i+1%></td>
+                      <td><%= bloodbanks[i].relatedTo.name %></td>
+                      <td><%= bloodbanks[i].currcapacity.opos %></td>
+                      <td><%= bloodbanks[i].currcapacity.oneg%></td>
+                      <td><%= bloodbanks[i].currcapacity.apos%></td>
+                      <td><%= bloodbanks[i].currcapacity.aneg%></td>
+                      <td><%= bloodbanks[i].currcapacity.bpos%></td>
+                      <td><%= bloodbanks[i].currcapacity.bneg%></td>
+                      <td><%= bloodbanks[i].currcapacity.abpos%></td>
+                      <td><%= bloodbanks[i].currcapacity.abneg%></td>
+                      <td><%= bloodbanks[i].price%></td>
+                      <td><%= bloodbanks[i].contact.email%></td>
+                      <td>
+                        <% if(!bloodbanks[i].handlerId.equals(currentUser._id)) { %> 
+                          <a href="/hospHospSection/bloodbank/specificRequest" class="btn btn-outline-danger">Request</a>
+                          <% }else{ %>
+                          <p style="color: red">Your BloodBank!</p>
+                        <% } %>
+                      </td>
+                    </tr>
+                <% } %>
+              </tbody>
+            </table>
+		</div>
+	</div>
+  <% }else{ %>
+    <h5 style="text-align: center;">No Bloodbanks Found!!</h5>  
+  <% } %>
+</div> 
+<%-include("../../partials/footer");-%>
