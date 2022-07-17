@@ -6,7 +6,7 @@ Zimpilo helps users to interact with doctors, take appointment, save medical rec
 1. Clone this repository in your local storage:
 
 ```
-git clone https://github.com/Pro-Abhinav/MedBuddy.git
+git clone https://github.com/shilppatel913/MedBuddy.git
 ```
 2. Run command: 
 ```
